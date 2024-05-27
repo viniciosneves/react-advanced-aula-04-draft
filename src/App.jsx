@@ -7,8 +7,20 @@ import Input from './components/Input'
 import ErrorText from './components/ErrorText'
 import Button from './components/Button'
 import Form from './components/Form'
+import { ErrorMessage, Formik } from 'formik'
+
+const formInitialValue = {
+  name: '',
+  email: '',
+  password: '',
+  confirmPassword: ''
+}
 
 function App() {
+
+  const onFormSubmit = (values) => {
+    console.log(values)
+  }
 
   return (
     <>
@@ -17,38 +29,43 @@ function App() {
         <Heading>
           Cadastro
         </Heading>
-        <Form>
-          <Fieldset>
-            <Label>
-              Nome
-            </Label>
-            <Input />
-            <ErrorText>
-              Nome é obrigatório
-            </ErrorText>
-          </Fieldset>
-          <Fieldset>
-            <Label>
-              E-mail
-            </Label>
-            <Input />
-          </Fieldset>
-          <Fieldset>
-            <Label>
-              Senha
-            </Label>
-            <Input />
-          </Fieldset>
-          <Fieldset>
-            <Label>
-              Confirme sua senha
-            </Label>
-            <Input />
-          </Fieldset>
-          <Button>
-            Enviar
-          </Button>
-        </Form>
+        <Formik
+          initialValues={formInitialValue}
+          onSubmit={onFormSubmit}
+        >
+          <Form>
+            <Fieldset>
+              <Label>
+                Nome
+              </Label>
+              <Input name="name" />
+              <ErrorMessage name='name' component={ErrorText}>
+                Nome é obrigatório
+              </ErrorMessage>
+            </Fieldset>
+            <Fieldset>
+              <Label>
+                E-mail
+              </Label>
+              <Input name="email" type="email" />
+            </Fieldset>
+            <Fieldset>
+              <Label>
+                Senha
+              </Label>
+              <Input name="password" type="password" />
+            </Fieldset>
+            <Fieldset>
+              <Label>
+                Confirme sua senha
+              </Label>
+              <Input name="confirmPassword" type="password" />
+            </Fieldset>
+            <Button type='submit'>
+              Enviar
+            </Button>
+          </Form>
+        </Formik>
       </Container>
     </>
   )
