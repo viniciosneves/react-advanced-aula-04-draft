@@ -10,6 +10,7 @@ import { ErrorMessage, Formik } from 'formik'
 
 import * as Yup from 'yup'
 import ErrorText from './components/ErrorText'
+import axios from 'axios'
 
 
 const validationSchema = Yup.object({
@@ -28,8 +29,17 @@ const validationSchema = Yup.object({
 
 function App() {
 
-  const createUser = (values) => {
-    console.log(values)
+  const createUser = (values, { resetForm }) => {
+    const user = values
+    delete user.confirmPassword
+    axios.post('http://localhost:3000/users', user)
+      .then(() => {
+        alert('Usuário cadastrado com sucesso')
+        resetForm()
+      })
+      .catch((error) => {
+        console.error(error)
+      })
   }
 
   return (
