@@ -6,7 +6,25 @@ import Label from './components/Label'
 import Input from './components/Input'
 import Button from './components/Button'
 import Form from './components/Form'
-import { Formik } from 'formik'
+import { ErrorMessage, Formik } from 'formik'
+
+import * as Yup from 'yup'
+import ErrorText from './components/ErrorText'
+
+
+const validationSchema = Yup.object({
+  name: Yup.string()
+    .required('O nome é obrigatório'),
+  email: Yup.string()
+    .email('Por favor, informe um e-mail válido')
+    .required('Por favor, informe o seu email'),
+  password: Yup.string()
+    .min(8, 'A senha deve possuir pelo menos 8 caracteres')
+    .required(),
+  confirmPassword: Yup.string().
+    oneOf([Yup.ref('password')], 'As senhas devem ser iguais!')
+    .required('Confirme sua senha!')
+})
 
 function App() {
 
@@ -29,6 +47,7 @@ function App() {
             password: '',
             confirmPassword: ''
           }}
+          validationSchema={validationSchema}
         >
           <Form>
             <Fieldset>
@@ -36,24 +55,28 @@ function App() {
                 Nome
               </Label>
               <Input name="name"/>
+              <ErrorMessage name='name' component={ErrorText} />
             </Fieldset>
             <Fieldset>
               <Label>
                 E-mail
               </Label>
               <Input name="email" type="email" />
+              <ErrorMessage name='email' component={ErrorText} />
             </Fieldset>
             <Fieldset>
               <Label>
                 Senha
               </Label>
               <Input name="password" type="password"/>
+              <ErrorMessage name='password' component={ErrorText} />
             </Fieldset>
             <Fieldset>
               <Label>
                 Confirme sua senha
               </Label>
               <Input name="confirmPassword" type="password"/>
+              <ErrorMessage name='confirmPassword' component={ErrorText} />
             </Fieldset>
             <Button type='submit'>
               Enviar
